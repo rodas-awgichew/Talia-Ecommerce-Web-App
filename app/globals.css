@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Base global styles */
+@layer base {
+  body {
+    @apply bg-bone text-charcoal font-sans antialiased;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-serif;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Reusable UI components */
+@layer components {
+
+  /* Your luxury grid layout */
+  .luxury-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6;
+  }
+
+  /* Scrollbar styling */
+  .scrollbar-luxury::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollbar-luxury::-webkit-scrollbar-track {
+    background: #F5F5F7;
+  }
+
+  .scrollbar-luxury::-webkit-scrollbar-thumb {
+    background: #121212;
+  }
+
+  .scrollbar-luxury::-webkit-scrollbar-thumb:hover {
+    background: #C2B280;
+  }
+
+}
