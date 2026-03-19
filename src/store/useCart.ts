@@ -20,6 +20,7 @@ interface CartStore {
   addItem: (product: Product) => void;
   removeItem: (productId: string) => void;
   clearCart: () => void;
+  decreaseQuantity: (productId: string) => void;
   total: () => number;
 }
 
@@ -48,6 +49,17 @@ export const useCart = create<CartStore>()(
           items: get().items.filter((item) => item.id !== productId),
         });
       },
+      decreaseQuantity: (productId: string) => {
+        const currentItems = get().items;
+
+       set({
+        items: currentItems.map((item) =>
+        item.id === productId
+        ? { ...item, quantity: Math.max(item.quantity - 1, 1) }
+        : item
+      ),
+    });
+    },
       clearCart: () => set({ items: [] }),
       total: () =>
         get().items.reduce((acc, item) => acc + item.price * item.quantity, 0),
