@@ -4,15 +4,40 @@ import Link from 'next/link';
 import { motion } from 'motion/react';
 import { useState } from 'react';
 import { ArrowRight } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+
+import { getSupabaseBrowserClient } from '@/src/lib/supabaseClient';
 
 export default function Login() {
+  const router = useRouter();
+  const supabase = getSupabaseBrowserClient();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [loading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle login logic
-    console.log('Login attempt:', { email, password });
+
+    setLoading(true);
+    setErrorMsg('');
+
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setLoading(false);
+
+    if (error) {
+      setErrorMsg(error.message);
+      return;
+    }
+
+    // ✅ Redirect after login
+    router.push('/');
   };
 
   return (
@@ -24,43 +49,64 @@ export default function Login() {
       >
         <div className="text-center space-y-4">
           <h1 className="text-5xl tracking-tighter">Welcome Back</h1>
-          <p className="text-charcoal/60 text-sm uppercase tracking-widest font-medium">Please enter your details</p>
+          <p className="text-charcoal/60 text-sm uppercase tracking-widest font-medium">
+            Please enter your details
+          </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form onSubmit={handleLogin} className="space-y-8">
+
+          {/* ERROR */}
+          {errorMsg && (
+            <p className="text-red-500 text-sm">{errorMsg}</p>
+          )}
+
           <div className="space-y-6">
+
+            {/* EMAIL */}
             <div className="space-y-2">
-              <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/40">Email Address</label>
+              <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/40">
+                Email Address
+              </label>
               <input 
                 type="email" 
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full bg-transparent border-b border-charcoal/10 py-3 focus:border-charcoal outline-none transition-colors text-sm"
+                className="w-full bg-transparent border-b border-charcoal/10 py-3 focus:border-charcoal outline-none text-sm"
                 placeholder="email@example.com"
               />
             </div>
+
+            {/* PASSWORD */}
             <div className="space-y-2">
               <div className="flex justify-between items-center">
-                <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/40">Password</label>
-                <Link href="/auth/forgot-password" title="Forgot Password" className="text-[10px] uppercase tracking-widest text-charcoal/40 hover:text-charcoal transition-colors">Forgot Password?</Link>
+                <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/40">
+                  Password
+                </label>
+                <Link href="/auth/forgot-password" className="text-[10px] uppercase tracking-widest text-charcoal/40 hover:text-charcoal">
+                  Forgot Password?
+                </Link>
               </div>
+
               <input 
                 type="password" 
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full bg-transparent border-b border-charcoal/10 py-3 focus:border-charcoal outline-none transition-colors text-sm"
+                className="w-full bg-transparent border-b border-charcoal/10 py-3 focus:border-charcoal outline-none text-sm"
                 placeholder="••••••••"
               />
             </div>
           </div>
 
-          <button 
+          {/* BUTTON */}
+          <button  
             type="submit"
-            className="w-full py-4 bg-charcoal text-bone text-xs uppercase tracking-widest font-bold hover:bg-sand transition-all flex items-center justify-center space-x-3"
+            disabled={loading}
+            className="w-full py-4 bg-charcoal text-bone text-xs uppercase tracking-widest font-bold hover:bg-sand transition-all flex items-center justify-center space-x-3 disabled:opacity-50"
           >
-            <span>Sign In</span>
+            <span>{loading ? "Signing in..." : "Sign In"}</span>
             <ArrowRight size={14} />
           </button>
         </form>
@@ -69,7 +115,7 @@ export default function Login() {
           <p className="text-sm text-charcoal/60">New to Sador?</p>
           <Link 
             href="/auth/signup" 
-            className="inline-block text-xs uppercase tracking-widest font-bold border-b border-charcoal pb-1 hover:text-sand hover:border-sand transition-all"
+            className="inline-block text-xs uppercase tracking-widest font-bold border-b border-charcoal pb-1 hover:text-sand"
           >
             Create an Account
           </Link>
