@@ -2,8 +2,14 @@ import { stripe } from "@/src/lib/stripe";
 import { headers } from "next/headers";
 
 export async function POST(req: Request) {
-  const body = await req.text(); 
-  const sig = headers().get("stripe-signature")!;
+  const body = await req.text();
+
+  const headersList = await headers(); // ✅ FIX
+  const sig = headersList.get("stripe-signature");
+
+  if (!sig) {
+    return new Response("Missing signature", { status: 400 });
+  }
 
   let event;
 
@@ -14,6 +20,7 @@ export async function POST(req: Request) {
       process.env.STRIPE_WEBHOOK_SECRET!
     );
   } catch (err) {
+    console.error("Webhook signature error:", err);
     return new Response("Webhook Error", { status: 400 });
   }
 
@@ -22,8 +29,8 @@ export async function POST(req: Request) {
 
     console.log("✅ Payment successful:", session);
 
+    // TODO: save to database (Supabase later)
   }
 
   return new Response("OK", { status: 200 });
 }
-
