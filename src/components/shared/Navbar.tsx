@@ -91,19 +91,19 @@ export default function Navbar() {
 
             {/* RIGHT */}
             <div className="flex items-center justify-end space-x-5 flex-1">
-
-              {/* 👇 AUTH UI */}
-              {loading ? null : !user ? (
-                <Link href="/auth/login">
-                  <User size={20} />
-                </Link>
-              ) : (
+              {loading ? null : user && (
+                <>
+                <Link href="/account">
+                <User size={20} />
+                 </Link>
+                 
                 <button onClick={handleLogout}>
                   <LogOut size={20} />
-                </button>
-              )}
+                  </button>
+                 </>
+      )}
 
-              <Link href="/cart" className="relative">
+  <Link href="/cart" className="relative">
                 <ShoppingBag size={20} />
                 {cartCount > 0 && (
                   <span className="absolute -top-2 -right-2 bg-black text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold">
