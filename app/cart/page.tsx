@@ -6,7 +6,8 @@ import { Minus, Plus, X, ArrowRight, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
 import {loadStripe} from '@stripe/stripe-js';
-import {Elements } from '@stripe/react-stripe-js';
+import { getSupabaseBrowserClient } from '@/src/lib/supabaseClient';
+import { useRouter } from "next/navigation";
 
 if (!process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
   throw new Error("Missing Stripe publishable key");
@@ -19,24 +20,31 @@ const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
 export default function Cart() {
   const { items, removeItem, addItem, decreaseQuantity, total } = useCart();
 
-  
+ const router = useRouter();
 const handleCheckout = async () => {
-  try {
-  const res = await fetch("/api/checkout", {
-    method: "POST",
-    body: JSON.stringify({ items }),
-  });
+  const supabase = getSupabaseBrowserClient();
+  const { data } = await supabase.auth.getUser();
 
-  const data = await res.json();
-
-  if (data.url) {
-    window.location.href = data.url;
+  if (!data.user) {
+    router.push("/auth/login");
+    return;
   }
-}
-  catch (error) {
+
+  try {
+    const res = await fetch("/api/checkout", {
+      method: "POST",
+      body: JSON.stringify({ items }),
+    });
+
+    const dataRes = await res.json();
+
+    if (dataRes.url) {
+      window.location.href = dataRes.url;
+    }
+  } catch (error) {
     console.error("Checkout error:", error);
-   }
-};
+  }
+};  
 
 
   if (items.length === 0) {
