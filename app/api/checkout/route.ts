@@ -43,7 +43,12 @@ export async function POST(req: Request) {
 
       success_url: "http://localhost:3000/success",
       cancel_url: "http://localhost:3000/cart",
-    });
+   
+    metadata: {
+      user_id: user.id,
+      items: JSON.stringify(items),
+    },
+  });
 
     return NextResponse.json({ url: session.url });
 
