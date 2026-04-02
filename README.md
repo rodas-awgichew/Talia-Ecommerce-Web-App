@@ -155,7 +155,6 @@ Copy the webhook secret into `.env.local`.
 * 📦 Inventory & stock management
 * 🧾 Order history page (My Orders)
 * 💳 Custom checkout (Stripe Elements)
-* 🌍 Multi-currency support
 * 📊 Admin dashboard
 
 ---
