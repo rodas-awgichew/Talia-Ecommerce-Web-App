@@ -142,13 +142,6 @@ Copy the webhook secret into `.env.local`.
 
 ---
 
-##  Important Notes
-
-* Orders are created **only after webhook verification**.
-* Cart data is stored locally using Zustand.
-
----
-
 ## 🚀 Future Improvements
 
 * 🔐 User authentication (Supabase Auth)
