@@ -71,6 +71,7 @@ export default function Navbar() {
             {/* LEFT */}
             <div className="flex items-center flex-1">
               <button
+              title="Menu"
                 onClick={() => setIsMenuOpen(true)}
                 className="lg:hidden p-2 -ml-2"
               >
@@ -97,7 +98,9 @@ export default function Navbar() {
                 <User size={20} />
                  </Link>
                  
-                <button onClick={handleLogout}>
+                <button 
+                title="Logout"
+                onClick={handleLogout}>
                   <LogOut size={20} />
                   </button>
                  </>
@@ -136,7 +139,9 @@ export default function Navbar() {
               className="fixed top-0 left-0 bottom-0 w-[80%] max-w-sm bg-white z-[70] p-8"
             >
               <div className="flex justify-end">
-                <button onClick={() => setIsMenuOpen(false)}>
+                <button 
+                title="Close Menu"
+                onClick={() => setIsMenuOpen(false)}>
                   <X size={24} />
                 </button>
               </div>

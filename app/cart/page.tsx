@@ -90,16 +90,16 @@ const handleCheckout = async () => {
                     <h3 className="text-lg font-medium">{item.name}</h3>
                     <p className="text-xs text-charcoal/40 uppercase tracking-widest">{item.category}</p>
                   </div>
-                  <button onClick={() => removeItem(item.id)} className="text-charcoal/40 hover:text-charcoal transition-colors">
+                  <button title="Remove Item" onClick={() => removeItem(item.id)} className="text-charcoal/40 hover:text-charcoal transition-colors">
                     <X size={20} />
                   </button>
                 </div>
 
                 <div className="flex justify-between items-end">
                   <div className="flex items-center border border-charcoal/10 px-3 py-2 space-x-4">
-                    <button onClick={() => decreaseQuantity(item.id)} className="hover:text-sand transition-colors"><Minus size={12} /></button>
+                    <button title="Decrease Quantity" onClick={() => decreaseQuantity(item.id)} className="hover:text-sand transition-colors"><Minus size={12} /></button>
                     <span className="text-xs font-medium w-4 text-center">{item.quantity}</span>
-                    <button onClick={() => addItem(item)} className="hover:text-sand transition-colors"><Plus size={12} /></button>
+                    <button title="Increase Quantity" onClick={() => addItem(item)} className="hover:text-sand transition-colors"><Plus size={12} /></button>
                   </div>
                   <p className="text-lg font-serif">{formatPrice(item.price * item.quantity)}</p>
                 </div>

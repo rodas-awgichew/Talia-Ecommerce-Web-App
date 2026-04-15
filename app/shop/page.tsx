@@ -12,25 +12,43 @@ const COLORS = ['Black', 'Bone', 'Sand', 'Charcoal', 'Olive'];
 const SIZES = ['XS', 'S', 'M', 'L', 'XL'];
 
 const MOCK_PRODUCTS = [
-  { id: '1', name: 'Silk Bias Midi Dress', price: 380, image: 'https://picsum.photos/seed/dress1/800/1200', category: 'Dresses', slug: 'silk-bias-midi-dress' },
-  { id: '2', name: 'Cashmere Oversized Coat', price: 850, image: 'https://picsum.photos/seed/coat1/800/1200', category: 'Outerwear', slug: 'cashmere-oversized-coat' },
-  { id: '3', name: 'Leather Minimalist Tote', price: 420, image: 'https://picsum.photos/seed/bag1/800/1200', category: 'Accessories', slug: 'leather-minimalist-tote' },
-  { id: '4', name: 'Linen Tailored Trousers', price: 240, image: 'https://picsum.photos/seed/pants1/800/1200', category: 'Bottoms', slug: 'linen-tailored-trousers' },
-  { id: '5', name: 'Cotton Poplin Shirt', price: 180, image: 'https://picsum.photos/seed/shirt1/800/1200', category: 'Tops', slug: 'cotton-poplin-shirt' },
-  { id: '6', name: 'Wool Blend Blazer', price: 450, image: 'https://picsum.photos/seed/blazer1/800/1200', category: 'Outerwear', slug: 'wool-blend-blazer' },
-  { id: '7', name: 'Satin Slip Skirt', price: 220, image: 'https://picsum.photos/seed/skirt1/800/1200', category: 'Bottoms', slug: 'satin-slip-skirt' },
-  { id: '8', name: 'Minimalist Gold Hoops', price: 120, image: 'https://picsum.photos/seed/jewelry1/800/1200', category: 'Accessories', slug: 'minimalist-gold-hoops' },
+  { id: '1', name: 'Silk Bias Midi Dress', price: 380, image: 'https://picsum.photos/seed/dress1/800/1200', category: 'Dresses', slug: 'silk-bias-midi-dress', colors: ['Black', 'Sand'], sizes: ['S', 'M', 'L'] },
+  { id: '2', name: 'Cashmere Oversized Coat', price: 850, image: 'https://picsum.photos/seed/coat1/800/1200', category: 'Outerwear', slug: 'cashmere-oversized-coat', colors: ['Bone', 'Charcoal'], sizes: ['M', 'L', 'XL'] },
+  { id: '3', name: 'Leather Minimalist Tote', price: 420, image: 'https://picsum.photos/seed/bag1/800/1200', category: 'Accessories', slug: 'leather-minimalist-tote', colors: ['Black'], sizes: ['S', 'M'] },
+  { id: '4', name: 'Linen Tailored Trousers', price: 240, image: 'https://picsum.photos/seed/pants1/800/1200', category: 'Bottoms', slug: 'linen-tailored-trousers', colors: ['Olive'], sizes: ['S', 'M', 'L'] },
+  { id: '5', name: 'Cotton Poplin Shirt', price: 180, image: 'https://picsum.photos/seed/shirt1/800/1200', category: 'Tops', slug: 'cotton-poplin-shirt', colors: ['Bone'], sizes: ['S', 'M'] },
+  { id: '6', name: 'Wool Blend Blazer', price: 450, image: 'https://picsum.photos/seed/blazer1/800/1200', category: 'Outerwear', slug: 'wool-blend-blazer', colors: ['Charcoal'], sizes: ['M', 'L'] },
+  { id: '7', name: 'Satin Slip Skirt', price: 220, image: 'https://picsum.photos/seed/skirt1/800/1200', category: 'Bottoms', slug: 'satin-slip-skirt', colors: ['Sand'], sizes: ['S', 'M', 'L'] },
+  { id: '8', name: 'Minimalist Gold Hoops', price: 120, image: 'https://picsum.photos/seed/jewelry1/800/1200', category: 'Accessories', slug: 'minimalist-gold-hoops', colors: ['Gold'], sizes: ['S', 'M', 'L'] },
 ];
 
 function ShopContent() {
   const searchParams = useSearchParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [selectedSize, setSelectedSize] = useState<string | null>(null);
+  const [sort, setSort] = useState("Newest");
   
   const currentCategory = searchParams.get('category') || 'All';
 
-  const filteredProducts = MOCK_PRODUCTS.filter(product => 
-    currentCategory === 'All' || product.category.toLowerCase() === currentCategory.toLowerCase()
-  );
+  let filteredProducts = MOCK_PRODUCTS.filter((product) => {
+  const categoryMatch =
+    currentCategory === "All" ||
+    product.category.toLowerCase() === currentCategory.toLowerCase();
+
+  const colorMatch = !selectedColor || product.colors.includes(selectedColor);
+
+  const sizeMatch = !selectedSize || product.sizes.includes(selectedSize);
+
+  return categoryMatch && colorMatch && sizeMatch;
+
+  if (sort === "Price: Low to High") {
+  filteredProducts.sort((a, b) => a.price - b.price);
+} else if (sort === "Price: High to Low") {
+  filteredProducts.sort((a, b) => b.price - a.price);
+}
+
+});
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -60,6 +78,7 @@ function ShopContent() {
               {['Newest', 'Price: Low to High', 'Price: High to Low'].map((option) => (
                 <button 
                   key={option}
+                  onClick={() => setSort(option)}
                   className="w-full text-left px-4 py-3 text-[10px] uppercase tracking-widest hover:bg-charcoal hover:text-bone transition-colors"
                 >
                   {option}
@@ -98,6 +117,7 @@ function ShopContent() {
               {COLORS.map((color) => (
                 <button 
                   key={color}
+                  onClick={() => setSelectedColor(color)}
                   className="w-6 h-6 rounded-full border border-charcoal/10 hover:scale-110 transition-transform"
                   style={{ backgroundColor: color.toLowerCase() === 'bone' ? '#F5F5F7' : color.toLowerCase() === 'sand' ? '#C2B280' : color.toLowerCase() }}
                   title={color}
@@ -112,6 +132,7 @@ function ShopContent() {
               {SIZES.map((size) => (
                 <button 
                   key={size}
+                  onClick={() => setSelectedSize(size)}
                   className="py-2 border border-charcoal/10 text-[10px] uppercase tracking-widest hover:bg-charcoal hover:text-bone transition-all"
                 >
                   {size}

@@ -27,28 +27,37 @@ export default function Signup() {
     setErrorMsg('');
     setSuccessMsg('');
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          full_name: name, // ✅ store user name
-        },
-      },
-    });
+    const { data, error } = await supabase.auth.signUp({// ✅ store user name
+  email,
+  password,
+  options: {
+    data: { full_name: name },
+  },
+});
 
-    setLoading(false);
+if (error) {
+  setErrorMsg(error.message);
+  setLoading(false);
+  return;
+}
+
+// ✅ Only insert after success
+await supabase.from("profiles").insert({
+  id: data.user?.id,
+  email,
+  full_name: name,
+  role: "user",
+});
 
     if (error) {
       setErrorMsg(error.message);
       return;
     }
-
-    // ✅ If email confirmation is OFF
+    
     if (data.session) {
-      router.push('/'); // redirect after signup
+      router.push('/');
     } else {
-      // ✅ If email confirmation is ON
+      
       setSuccessMsg('Check your email to confirm your account.');
     }
   };
@@ -81,7 +90,6 @@ export default function Signup() {
 
           <div className="space-y-6">
 
-            {/* NAME */}
             <div className="space-y-2">
               <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/40">
                 Full Name
@@ -96,7 +104,6 @@ export default function Signup() {
               />
             </div>
 
-            {/* EMAIL */}
             <div className="space-y-2">
               <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/40">
                 Email Address
@@ -111,7 +118,6 @@ export default function Signup() {
               />
             </div>
 
-            {/* PASSWORD */}
             <div className="space-y-2">
               <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/40">
                 Password
@@ -127,7 +133,6 @@ export default function Signup() {
             </div>
           </div>
 
-          {/* SUBMIT BUTTON */}
           <button 
             type="submit"
             disabled={loading}

@@ -19,26 +19,50 @@ export default function Login() {
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setLoading(true);
-    setErrorMsg('');
+  setLoading(true);
+  setErrorMsg("");
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
 
+  if (error) {
+    setErrorMsg(error.message);
     setLoading(false);
+    return;
+  }
 
-    if (error) {
-      setErrorMsg(error.message);
-      return;
-    }
+  const user = data.user;
 
-    // ✅ Redirect after login
-    router.push('/');
-  };
+  const { data: profile, error: profileError } = await supabase
+  .from("profiles")
+  .select("role")
+  .eq("id", user.id)
+  .single();
+
+if (profileError || !profile) {
+  console.error("Profile missing");
+
+  document.cookie = `user-role=user; path=/`;
+
+  router.push("/");
+  return;
+}
+
+  setLoading(false);
+
+  //  ROLE-BASED REDIRECT
+  if (profile.role === "admin") {
+    router.push("/admin");
+  } else {
+    router.push("/");
+  }
+
+  router.refresh();
+};
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 flex flex-col items-center justify-center min-h-[70vh]">
