@@ -32,32 +32,19 @@ export async function POST(req: Request) {
       process.env.SUPABASE_SERVICE_ROLE_KEY!
     );
 
-    const items = JSON.parse(session.metadata.items);
-
-    // Create order
-    const { data: order } = await supabase
+    // Update order status to paid
+    const { error } = await supabase
       .from("orders")
-      .insert({
-        user_id: session.metadata.user_id,
-        total: session.amount_total / 100,
+      .update({
         status: "paid",
-        stripe_session_id: session.id,
+        stripe_session_id: session.id
       })
-      .select()
-      .single();
+      .eq("id", session.metadata.order_id);
 
-    // Create order items
-    await supabase.from("order_items").insert(
-      items.map((item: any) => ({
-        order_id: order.id,
-        product_id: item.id,
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price,
-        size: item.size,
-        color: item.color,
-      }))
-    );
+    if (error) {
+      console.error("Order update error:", error);
+      return new Response("Order update failed", { status: 500 });
+    }
   }
 
   return new Response("OK", { status: 200 });
