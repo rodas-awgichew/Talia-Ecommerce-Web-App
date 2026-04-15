@@ -135,17 +135,8 @@ Copy the webhook secret into `.env.local`.
 * ✅ Never trust frontend pricing
 * ✅ Use Stripe webhooks as source of truth
 * ✅ Store Stripe session IDs to prevent duplicates
-* ✅ Use Supabase service role key ONLY on backend
-* ✅ Validate all incoming API requests
 * ✅ Use HTTPS in production
 * ✅ Implement idempotency for Stripe requests
-
----
-
-##  Important Notes
-
-* Orders are created **only after webhook verification**.
-* Cart data is stored locally using Zustand.
 
 ---
 
@@ -155,7 +146,6 @@ Copy the webhook secret into `.env.local`.
 * 📦 Inventory & stock management
 * 🧾 Order history page (My Orders)
 * 💳 Custom checkout (Stripe Elements)
-* 🌍 Multi-currency support
 * 📊 Admin dashboard
 
 ---
