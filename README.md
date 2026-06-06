@@ -9,7 +9,7 @@ This project demonstrates a **secure, production-ready payment flow** with webho
 
 *  Cart system with Zustand (persistent storage)
 *  Secure payments via Stripe Checkout
-*  Webhook-based payment verification (no fake success)
+*  Webhook-based payment verification 
 *  Order storage using Supabase (PostgreSQL)
 *  Order + Order Items relational structure
 *  Fast UI with Next.js App Router
