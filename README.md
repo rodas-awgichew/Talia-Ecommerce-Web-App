@@ -153,7 +153,6 @@ Copy the webhook secret into `.env.local`.
 ## 👨‍💻 Author
 
 Built by **Rodas_Awgichew**
-Feel free to fork, improve, and build on top of it.
 
 ---
 
