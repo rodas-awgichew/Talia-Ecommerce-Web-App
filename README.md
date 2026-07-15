@@ -132,7 +132,6 @@ Copy the webhook secret into `.env.local`.
 
 ## 🔐 Security Best Practices
 
-* ✅ Never trust frontend pricing
 * ✅ Use Stripe webhooks as source of truth
 * ✅ Store Stripe session IDs to prevent duplicates
 * ✅ Use HTTPS in production
