@@ -133,7 +133,6 @@ Copy the webhook secret into `.env.local`.
 ## 🔐 Security Best Practices
 
 * ✅ Use Stripe webhooks as source of truth
-* ✅ Store Stripe session IDs to prevent duplicates
 * ✅ Use HTTPS in production
 * ✅ Implement idempotency for Stripe requests
 
