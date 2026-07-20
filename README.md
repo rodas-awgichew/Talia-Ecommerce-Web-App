@@ -139,8 +139,7 @@ Copy the webhook secret into `.env.local`.
 ---
 
 ## 🚀 Future Improvements
-
-* 🔐 User authentication (Supabase Auth)
+ 
 * 📦 Inventory & stock management
 * 🧾 Order history page (My Orders)
 * 💳 Custom checkout (Stripe Elements)
